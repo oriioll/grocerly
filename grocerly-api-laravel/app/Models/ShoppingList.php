@@ -20,7 +20,7 @@ class ShoppingList extends Model
     //Relation with food
     public function foods()
     {
-        return $this->belongsToMany(Food::class, 'FOOD_LIST', 'list_id', 'food_id')
+        return $this->belongsToMany(Food::class, 'food_list', 'list_id', 'food_id')
             ->using(FoodList::class)
             ->withTimestamps();
     }

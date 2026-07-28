@@ -25,7 +25,7 @@ class Recipe extends Model
     //Relation with food
     public function foods()
     {
-        return $this->belongsToMany(Food::class, 'RECIPE_FOODS', 'recipe_id', 'food_id')
+        return $this->belongsToMany(Food::class, 'recipe_food', 'recipe_id', 'food_id')
             ->using(RecipeFood::class)
             ->withTimestamps();
     }
