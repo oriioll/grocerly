@@ -19,15 +19,15 @@ class Food extends Model
     //Relation with shopping list
     public function shoppingLists()
     {
-        return $this->belongsToMany(ShoppingList::class, 'FOOD_LIST', 'food_id', 'list_id')
-            ->using(FoodList::class) // <--- Aquí vinculas el modelo pivote
-            ->withTimestamps();      // <--- Vital para leer created_at/modified_at del pivote
+        return $this->belongsToMany(ShoppingList::class, 'food_list', 'food_id', 'list_id')
+            ->using(FoodList::class)
+            ->withTimestamps();
     }
 
     // Relation with recipe
     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class, 'RECIPE_FOODS', 'food_id', 'recipe_id')
+        return $this->belongsToMany(Recipe::class, 'recipe_food', 'food_id', 'recipe_id')
             ->using(RecipeFood::class)
             ->withTimestamps();
     }
