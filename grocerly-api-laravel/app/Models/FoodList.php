@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class FoodList extends Pivot
 {
-    protected $table = 'food_list';
+    protected $table = 'food_lists';
 
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'modified_at';

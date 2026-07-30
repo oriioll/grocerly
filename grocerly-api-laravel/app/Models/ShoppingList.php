@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ShoppingList extends Model
 {
-    protected $table = 'shopping_list';
+    protected $table = 'shopping_lists';
     protected $primaryKey = 'list_id';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'modified_at';
+
+    protected $fillable = [
+        'user_id',
+    ];
 
     //Relation with user
     public function user()
@@ -20,7 +24,7 @@ class ShoppingList extends Model
     //Relation with food
     public function foods()
     {
-        return $this->belongsToMany(Food::class, 'food_list', 'list_id', 'food_id')
+        return $this->belongsToMany(Food::class, 'food_lists', 'list_id', 'food_id')
             ->using(FoodList::class)
             ->withTimestamps();
     }

@@ -19,7 +19,7 @@ class Food extends Model
     //Relation with shopping list
     public function shoppingLists()
     {
-        return $this->belongsToMany(ShoppingList::class, 'food_list', 'food_id', 'list_id')
+        return $this->belongsToMany(ShoppingList::class, 'food_lists', 'food_id', 'list_id')
             ->using(FoodList::class)
             ->withTimestamps();
     }
@@ -27,7 +27,7 @@ class Food extends Model
     // Relation with recipe
     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class, 'recipe_food', 'food_id', 'recipe_id')
+        return $this->belongsToMany(Recipe::class, 'recipe_foods', 'food_id', 'recipe_id')
             ->using(RecipeFood::class)
             ->withTimestamps();
     }
