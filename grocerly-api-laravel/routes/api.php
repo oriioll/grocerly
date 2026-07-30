@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+const RECIPE_ID_URL = "/recipes/{recipeId}";
+
 function todo()
 {
     return "TODO";
@@ -16,16 +19,16 @@ Route::get("/recipes", todo());
 Route::get("/recipes/me", todo());
 
 //Get a concrete recipe only if is public or made by the user
-Route::get("/recipes/{recipeId}", todo());
+Route::get(RECIPE_ID_URL, todo());
 
 //Post a recipe - sent in request body
 Route::post("/recipes", todo());
 
 //Modify the recipe with url recipe id using request body, only if created by the user
-Route::put("/recipes/{recipeId}", todo());
+Route::put(RECIPE_ID_URL, todo());
 
 //Delete a concrete recipe, only if created by the user
-Route::delete("/recipes/{recipeId}", todo());
+Route::delete(RECIPE_ID_URL, todo());
 
 //SHOPPING LIST
 //Get shopping-list of the user
