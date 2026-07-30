@@ -6,58 +6,64 @@ use Illuminate\Support\Facades\Route;
 
 const RECIPE_ID_URL = "/recipes/{recipeId}";
 
-function todo()
-{
-    return "TODO";
-}
-
 //RECIPES
 //Get all public recipes
-Route::get("/recipes", todo());
+Route::get("/recipes", fn() => "TODO");
 
 //Get all recipes created by the user
-Route::get("/recipes/me", todo());
+Route::get("/recipes/me", fn() => "TODO");
 
 //Get a concrete recipe only if is public or made by the user
-Route::get(RECIPE_ID_URL, todo());
+Route::get(RECIPE_ID_URL, fn() => "TODO");
 
 //Post a recipe - sent in request body
-Route::post("/recipes", todo());
+Route::post("/recipes", fn() => "TODO");
 
 //Modify the recipe with url recipe id using request body, only if created by the user
-Route::put(RECIPE_ID_URL, todo());
+Route::put(RECIPE_ID_URL, fn() => "TODO");
 
 //Delete a concrete recipe, only if created by the user
-Route::delete(RECIPE_ID_URL, todo());
+Route::delete(RECIPE_ID_URL, fn() => "TODO");
 
 //SHOPPING LIST
 //Get shopping-list of the user
-Route::get("/shopping-lists", todo());
+Route::get("/shopping-lists", fn() => "TODO");
 
 //Get the recipe with that id, only created by the user
-Route::get("/shopping-lists/{listId}", todo());
+Route::get("/shopping-lists/{listId}", fn() => "TODO");
 
 //Post a new shopping list for the user
-Route::post("/shopping-lists", todo());
+Route::post("/shopping-lists", fn() => "TODO");
 
 //Post a food into that shopping list, only if created by the user
-Route::post("/shopping-lists/{listId}/foods", todo());
+Route::post("/shopping-lists/{listId}/foods", fn() => "TODO");
 
 //Modify food in parameter of the list in parameter, only if that list is created by the user
-Route::put("/shopping-lists/{listId}/foods/{foodId}", todo());
+Route::put("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
 
 //Delete a concrete food from a concrete shopping list, only if created by the user
-Route::delete("/shopping-lists/{listId}/foods/{foodId}", todo());
+Route::delete("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
 
 //Delete a concrete shopping list, only if created by the user
-Route::delete("/shopping-lists/{listId}", todo());
+Route::delete("/shopping-lists/{listId}", fn() => "TODO");
 
 //AUTH
 //Get the info of the current user (who am i)
-Route::get("/auth/me", todo());
+Route::get("/auth/me", fn() => "TODO");
 
 //Register a user
-Route::post("/auth/register", todo());
+Route::post("/auth/register", fn() => "TODO");
+
+
+//FOOD
+//Get all the foods
+Route::get("/food", fn() => "TODO");
+
+//Get a food by id
+Route::get("/food/{foodId}", fn() => "TODO");
+
+//Post a food
+Route::post("/food", fn() => "TODO");
 
 /**
  * === FUTURE IMPLEMENTATION ===
