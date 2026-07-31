@@ -10,7 +10,8 @@ use App\Services\UserService;
 
 class AuthenticateWithToken
 {
-    private UserService $userService;
+    public function __construct(private UserService $userService) {}
+
     /**
      * Handle an incoming request seeing if the petition comes with the token of the user.
      * @author  Oriol Plazas

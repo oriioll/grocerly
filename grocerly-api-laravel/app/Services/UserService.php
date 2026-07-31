@@ -23,13 +23,13 @@ class UserService
 
     /**
      * Get a user by its token
-     * @param string $unhashedToken The id of the user
+     * @param string $unhashedToken The token of the user
      * @return User The user with the token
      * @author  Oriol Plazas
      * @since 01/08/2026
      * @see App\Models\User.php
      */
-    public function getByToken(string $unhashedToken): User
+    public function getByToken(string $unhashedToken): ?User
     {
         $hashedToken = hash('sha256', $unhashedToken);
         return User::where('token', $hashedToken)->first();
