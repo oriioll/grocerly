@@ -37,14 +37,17 @@ class UserService
 
     /**
      * Create user in db
-     * @param User $user User to insert
-     * @return bool Insert result
+     * @param array $data data of the user to insert
+     * @return User The user inserted
      * @author  Oriol Plazas
      * @since 30/07/2026
      * @see App\Models\User.php
      */
-    public function create(User $user): bool
+    public function create(array $data): User
     {
-        return $user->save();
+        return User::create([
+            'name' => $data['name'] ?? null,
+            'token' => hash('sha256', $data['token']),
+        ]);
     }
 }
