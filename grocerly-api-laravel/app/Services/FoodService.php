@@ -33,15 +33,15 @@ class FoodService
     }
 
     /**
-     * Create foods in db
-     * @param Food[] $data Array of foods to insert
+     * Create food in db
+     * @param Food $food food to insert
      * @return bool Insert result
      * @author  Oriol Plazas
      * @since 30/07/2026
      * @see App\Models\Food.php
      */
-    public function create(array $data): bool
+    public function create(Food $food): bool
     {
-        return Food::insert($data);
+        return $food->save();
     }
 }
