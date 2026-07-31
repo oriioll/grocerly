@@ -6,9 +6,11 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\UserService;
 
 class AuthenticateWithToken
 {
+    private UserService $userService;
     /**
      * Handle an incoming request seeing if the petition comes with the token of the user.
      * @author  Oriol Plazas
@@ -21,7 +23,7 @@ class AuthenticateWithToken
             return response()->json(['message' => 'No token provided'], 401);
         }
 
-        $user = User::where('token', hash('sha256', $token))->first();
+        $user = $this->userService->getByToken($token);
         if (!$user) {
             return response()->json(['message' => 'Invalid Token'], 401);
         }
