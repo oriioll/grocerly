@@ -48,8 +48,8 @@ Route::delete("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
 Route::delete("/shopping-lists/{listId}", fn() => "TODO");
 
 //AUTH
-//Get the info of the current user (who am i)
-Route::get("/auth/me", fn() => "TODO");
+//Get the info of the current user (who am i) - Use middleware to verify if user is logged and has a token
+Route::get("/auth/me", fn() => "TODO")->middleware('middleware.auth.token');
 
 //Register a user
 Route::post("/auth/register", fn() => "TODO");
