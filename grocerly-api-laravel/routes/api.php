@@ -18,7 +18,7 @@ Route::middleware('middleware.auth.token')->group(function () {
     Route::get("/recipes/me", [RecipeController::class, 'me']);
 
     //Get a concrete recipe only if is public or made by the user
-    Route::get(RECIPE_ID_URL, fn() => "TODO");
+    Route::get(RECIPE_ID_URL, [RecipeController::class, 'show']);
 
     //Post a recipe - sent in request body
     Route::post("/recipes", fn() => "TODO");
