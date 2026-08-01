@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -9,23 +10,25 @@ use Illuminate\Support\Facades\Route;
 const RECIPE_ID_URL = "/recipes/{recipeId}";
 
 //RECIPES
-//Get all public recipes
-Route::get("/recipes", fn() => "TODO");
+Route::middleware('middleware.auth.token')->group(function () {
+    //Get all public recipes or created by user
+    Route::get("/recipes", [RecipeController::class, 'all']);
 
-//Get all recipes created by the user
-Route::get("/recipes/me", fn() => "TODO");
+    //Get all recipes created by the user
+    Route::get("/recipes/me", [RecipeController::class, 'me']);
 
-//Get a concrete recipe only if is public or made by the user
-Route::get(RECIPE_ID_URL, fn() => "TODO");
+    //Get a concrete recipe only if is public or made by the user
+    Route::get(RECIPE_ID_URL, fn() => "TODO");
 
-//Post a recipe - sent in request body
-Route::post("/recipes", fn() => "TODO");
+    //Post a recipe - sent in request body
+    Route::post("/recipes", fn() => "TODO");
 
-//Modify the recipe with url recipe id using request body, only if created by the user
-Route::put(RECIPE_ID_URL, fn() => "TODO");
+    //Modify the recipe with url recipe id using request body, only if created by the user
+    Route::put(RECIPE_ID_URL, fn() => "TODO");
 
-//Delete a concrete recipe, only if created by the user
-Route::delete(RECIPE_ID_URL, fn() => "TODO");
+    //Delete a concrete recipe, only if created by the user
+    Route::delete(RECIPE_ID_URL, fn() => "TODO");
+});
 
 //SHOPPING LIST
 //Get shopping-list of the user
