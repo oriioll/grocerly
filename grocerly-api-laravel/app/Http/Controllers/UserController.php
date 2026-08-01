@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\UserDTO;
 use App\Http\Requests\UserPostRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -27,9 +28,11 @@ class UserController extends Controller
      */
     public function register(UserPostRequest $request)
     {
-        //Array with name and token, validated using UserPostRequest
-        $newUser = $request->validated();
-        $userCreated = $this->userService->create($newUser);
+        //Object with name and token, validated using UserPostRequest
+        $validated = $request->validated();
+        $userDTO = new UserDTO($validated['name'] ?? null, $validated['token']);
+
+        $userCreated = $this->userService->create($userDTO);
         return response()->json($userCreated);
     }
 }

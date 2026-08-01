@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\UserDTO;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -37,17 +38,17 @@ class UserService
 
     /**
      * Create user in db
-     * @param array $data data of the user to insert
+     * @param UserDTO $userDTO userDTO object of the usre to insert
      * @return User The user inserted
      * @author  Oriol Plazas
      * @since 30/07/2026
      * @see App\Models\User.php
      */
-    public function create(array $data): User
+    public function create(UserDTO $userDTO): User
     {
         return User::create([
-            'name' => $data['name'] ?? null,
-            'token' => hash('sha256', $data['token']),
+            'name' => $userDTO->name,
+            'token' => hash('sha256', $userDTO->token),
         ]);
     }
 }
