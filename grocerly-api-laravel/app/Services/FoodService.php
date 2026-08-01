@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\FoodDTO;
 use App\Models\Food;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -34,14 +35,18 @@ class FoodService
 
     /**
      * Create food in db
-     * @param Food $food food to insert
-     * @return bool Insert result
+     * @param FoodDTO $foodDTO food to insert
+     * @return Food Food inserted
      * @author  Oriol Plazas
-     * @since 30/07/2026
+     * @since 01/08/2026
      * @see App\Models\Food.php
      */
-    public function create(Food $food): bool
+    public function create(FoodDTO $foodDTO): Food
     {
-        return $food->save();
+        return Food::create([
+            'name' => $foodDTO->name,
+            'kcal' => $foodDTO->kcal,
+            'category' => $foodDTO->category
+        ]);
     }
 }

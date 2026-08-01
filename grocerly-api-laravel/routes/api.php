@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FoodController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -58,13 +59,13 @@ Route::post("/auth/register", [UserController::class, 'register']);
 
 //FOOD
 //Get all the foods
-Route::get("/food", fn() => "TODO");
+Route::get("/food", [FoodController::class, 'all']);
 
 //Get a food by id
-Route::get("/food/{foodId}", fn() => "TODO");
+Route::get("/food/{foodId}", [FoodController::class, 'show']);
 
-//Post a food
-Route::post("/food", fn() => "TODO");
+//Post a food - Use middleware to verify if user is logged and has a token
+Route::post("/food", [FoodController::class, 'post'])->middleware('middleware.auth.token');
 
 /**
  * === FUTURE IMPLEMENTATION ===
