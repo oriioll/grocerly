@@ -37,7 +37,7 @@ class FoodController extends Controller
     {
         //Object with name kcal and category, validated using FoodPostRequest
         $validated = $request->validated();
-        $foodDTO = new FoodDTO($validated['name'],  isset($validated['kcal']) ? (int) $validated['kcal'] : null, $validated['category']);
+        $foodDTO = new FoodDTO(null, $validated['name'],  isset($validated['kcal']) ? (int) $validated['kcal'] : null, $validated['category']);
 
         $foodCreated = $this->foodService->create($foodDTO);
         return response()->json($foodCreated, 201);

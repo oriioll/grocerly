@@ -20,7 +20,7 @@ class FoodService
         $foods = Food::all();
         $foodsDTO = [];
         foreach ($foods as $food) {
-            $foodsDTO[] = new FoodDTO($food->name, $food->kcal, $food->category);
+            $foodsDTO[] = $this->toDTO($food);
         }
         return $foodsDTO;
     }
@@ -36,7 +36,7 @@ class FoodService
     public function getById(int $foodId): FoodDTO
     {
         $food = Food::findOrFail($foodId);
-        return new FoodDTO($food->name, $food->kcal, $food->category);
+        return $this->toDTO($food);
     }
 
     /**
@@ -49,11 +49,36 @@ class FoodService
      */
     public function create(FoodDTO $foodDTO): FoodDTO
     {
-        $food =  Food::create([
-            'name' => $foodDTO->name,
-            'kcal' => $foodDTO->kcal,
-            'category' => $foodDTO->category
+        $food = $this->toModel($foodDTO);
+        $food->save();
+        return $this->toDTO($food);
+    }
+
+    /**
+     * Maps a Model to a DTO
+     * @param Food $food to convert to DTO
+     * @return FoodDTO DTO convered from a Model
+     * @author Oriol Plazas León
+     * @since 02/08/2026
+     */
+    private function toDTO(Food $food): FoodDTO
+    {
+        return new FoodDTO($food->food_id, $food->name, $food->kcal, $food->category);
+    }
+
+    /**
+     * Maps a DTO to a Model instance
+     * @param FoodDTO $dto DTO to convert to Model
+     * @return Food Model built from the DTO
+     * @author Oriol Plazas León
+     * @since 02/08/2026
+     */
+    private function toModel(FoodDTO $dto): Food
+    {
+        return new Food([
+            'name' => $dto->name,
+            'kcal' => $dto->kcal,
+            'category' => $dto->category,
         ]);
-        return new FoodDTO($food->name, $food->kcal, $food->category);
     }
 }

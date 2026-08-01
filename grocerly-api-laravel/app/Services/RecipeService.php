@@ -23,7 +23,7 @@ class RecipeService
         })->get();
         $recipesDTO = [];
         foreach ($recipes as $recipe) {
-            $recipesDTO[] = new RecipeDTO($recipe->recipe_id, $recipe->name, $recipe->is_public, $recipe->servings);
+            $recipesDTO[] = $this->toDTO($recipe);
         }
         return $recipesDTO;
     }
@@ -41,25 +41,51 @@ class RecipeService
         $recipes = Recipe::where('user_id', $userId)->get();
         $recipesDTO = [];
         foreach ($recipes as $recipe) {
-            $recipesDTO[] = new RecipeDTO($recipe->recipe_id, $recipe->name, $recipe->is_public, $recipe->servings);
+            $recipesDTO[] = $this->toDTO($recipe);
         }
         return $recipesDTO;
     }
 
     /**
-     * Create food in db
-     * @param FoodDTO $foodDTO food to insert
-     * @return Food Food inserted
+     * Get the recipe with that id
+     * @param int $recipeID recipe id to filter recipes
+     * @return RecipeDTO The recipe with that id
      * @author  Oriol Plazas
-     * @since 01/08/2026
-     * @see App\Models\Food.php
+     * @since 02/08/2026
+     * @see App\Models\Recipe.php
      */
-    public function create(FoodDTO $foodDTO): Food
+    public function getById(int $recipeID): RecipeDTO
     {
-        return Food::create([
-            'name' => $foodDTO->name,
-            'kcal' => $foodDTO->kcal,
-            'category' => $foodDTO->category
+        $recipe = Recipe::findOrFail($recipeID);
+        return $this->toDTO($recipe);
+    }
+
+
+    /**
+     * Maps a Model to a DTO
+     * @param Recipe $recipe to convert to DTO
+     * @return RecipeDTO DTO convered from a Model
+     * @author Oriol Plazas León
+     * @since 02/08/2026
+     */
+    private function toDTO(Recipe $recipe): RecipeDTO
+    {
+        return new RecipeDTO($recipe->recipe_id, $recipe->name, $recipe->is_public, $recipe->servings);
+    }
+
+    /**
+     * Maps a DTO to a Model instance
+     * @param RecipeDTO $dto DTO to convert to Model
+     * @return Recipe Model built from the DTO
+     * @author Oriol Plazas León
+     * @since 02/08/2026
+     */
+    private function toModel(RecipeDTO $dto): Recipe
+    {
+        return new Recipe([
+            'name' => $dto->name,
+            'is_public' => $dto->isPublic,
+            'servings' => $dto->servings,
         ]);
     }
 }

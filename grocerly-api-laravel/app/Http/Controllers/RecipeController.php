@@ -36,24 +36,14 @@ class RecipeController extends Controller
     }
 
     /**
-     * Gets information of the Food with that id
-     * @param int $foodId the id of the food to show
+     * Gets information of the recipe with that id
+     * @param int $recipeId the id of the recipe to show
      * @author Oriol Plazas
-     * @since 01/08/2026
+     * @since 02/08/2026
      */
-    public function show(int $foodId)
+    public function show(int $recipeId)
     {
-        $food = $this->foodService->getById($foodId);
-        return response()->json($food);
-    }
-
-    public function post(FoodPostRequest $request)
-    {
-        //Object with name kcal and category, validated using FoodPostRequest
-        $validated = $request->validated();
-        $foodDTO = new FoodDTO($validated['name'],  isset($validated['kcal']) ? (int) $validated['kcal'] : null, $validated['category']);
-
-        $foodCreated = $this->foodService->create($foodDTO);
-        return response()->json($foodCreated, 201);
+        $recipe = $this->recipeService->getById($recipeId);
+        return response()->json($recipe);
     }
 }
