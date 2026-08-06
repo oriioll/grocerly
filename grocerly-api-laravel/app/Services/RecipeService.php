@@ -82,6 +82,50 @@ class RecipeService
         return $this->toDTO($recipe->load('foods'));
     }
 
+    /**
+     * Delete recipe in db
+     * @param int $recipeId recipe to insert
+     * @return bool If recipe deleted
+     * @author  Oriol Plazas
+     * @since 06/08/2026
+     */
+    public function delete(int $recipeId): bool
+    {
+        $recipe = Recipe::find($recipeId);
+        if (!$recipe) {
+            return false;
+        }
+        //Use delete so trigger deleting event and delete foods - recipe relation with that recipe
+        $recipe->foods()->detach();
+        $recipe->delete();
+        return true;
+    }
+
+    /**
+     * Updates a recipe in db
+     * @param int $recipeId recipe to update
+     * @param RecipeDTO $recipeDTO the updated data of the recipe
+     * @return RecipeDTO updated recipe
+     * @author  Oriol Plazas
+     * @since 06/08/2026
+     */
+    public function put(RecipeDTO $recipeDTO, int $recipeId): RecipeDTO
+    {
+        $recipe = Recipe::findOrFail($recipeId);
+        $recipe->update([
+            'name' => $recipeDTO->name,
+            'is_public' => $recipeDTO->isPublic,
+            'servings' => $recipeDTO->servings,
+        ]);
+
+        //Update also the foods
+        $pivotData = collect($recipeDTO->foods)->mapWithKeys(fn($f) => [
+            $f->foodId => ['grams' => $f->grams],
+        ])->toArray();
+        $recipe->foods()->sync($pivotData);
+        return $this->toDTO($recipe->load('foods'));
+    }
+
 
     /**
      * Maps a Model to a DTO

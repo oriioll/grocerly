@@ -21,13 +21,13 @@ Route::middleware('middleware.auth.token')->group(function () {
     Route::get(RECIPE_ID_URL, [RecipeController::class, 'show']);
 
     //Post a recipe - sent in request body
-    Route::post("/recipes", fn() => "TODO");
+    Route::post("/recipes", [RecipeController::class, 'post']);
 
     //Modify the recipe with url recipe id using request body, only if created by the user
-    Route::put(RECIPE_ID_URL, fn() => "TODO");
+    Route::put(RECIPE_ID_URL, [RecipeController::class, 'update']);
 
     //Delete a concrete recipe, only if created by the user
-    Route::delete(RECIPE_ID_URL, fn() => "TODO");
+    Route::delete(RECIPE_ID_URL, [RecipeController::class, 'delete']);
 });
 
 //SHOPPING LIST
