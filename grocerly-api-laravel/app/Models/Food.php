@@ -29,6 +29,7 @@ class Food extends Model
     {
         return $this->belongsToMany(Recipe::class, 'recipe_foods', 'food_id', 'recipe_id')
             ->using(RecipeFood::class)
+            ->withPivot('grams')
             ->withTimestamps();
     }
 }

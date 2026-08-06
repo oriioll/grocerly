@@ -8,6 +8,7 @@ final class RecipeDTO
         public readonly ?int $id,
         public readonly string $name,
         public readonly bool $isPublic,
-        public readonly int $servings
+        public readonly int $servings,
+        public readonly array $foods,
     ) {}
 }

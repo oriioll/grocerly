@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\DTOs\RecipeDTO;
+use App\DTOs\RecipeFoodDTO;
 use App\Models\Recipe;
+use App\Models\RecipeFood;
 use Illuminate\Database\Eloquent\Collection;
 
 class RecipeService
@@ -18,7 +20,7 @@ class RecipeService
      */
     public function getAll(int $userId): array
     {
-        $recipes = Recipe::where(function ($query) use ($userId) {
+        $recipes = Recipe::with('foods')->where(function ($query) use ($userId) {
             $query->where('is_public', true)->orWhere('user_id', $userId);
         })->get();
         $recipesDTO = [];
@@ -38,7 +40,7 @@ class RecipeService
      */
     public function getByUserId(int $userId): array
     {
-        $recipes = Recipe::where('user_id', $userId)->get();
+        $recipes = Recipe::with('foods')->where('user_id', $userId)->get();
         $recipesDTO = [];
         foreach ($recipes as $recipe) {
             $recipesDTO[] = $this->toDTO($recipe);
@@ -56,8 +58,28 @@ class RecipeService
      */
     public function getById(int $recipeID): RecipeDTO
     {
-        $recipe = Recipe::findOrFail($recipeID);
+        $recipe = Recipe::with('foods')->findOrFail($recipeID);
         return $this->toDTO($recipe);
+    }
+
+    /**
+     * Create recipe in db
+     * @param RecipeDTO $recipeDTO recipe to insert
+     * @return RecipeDTO Recipe inserted
+     * @author  Oriol Plazas
+     * @since 06/08/2026
+     */
+    public function create(RecipeDTO $recipeDTO, int $userId): RecipeDTO
+    {
+        $recipe = $this->toModel($recipeDTO, $userId);
+        $recipe->save();
+        //Handle foods of the recipe (RecipeFoods table)
+        $pivotData = collect($recipeDTO->foods)->mapWithKeys(fn($f) => [
+            $f->foodId => ['grams' => $f->grams],
+        ])->toArray();
+        $recipe->foods()->attach($pivotData);
+
+        return $this->toDTO($recipe->load('foods'));
     }
 
 
@@ -70,7 +92,14 @@ class RecipeService
      */
     private function toDTO(Recipe $recipe): RecipeDTO
     {
-        return new RecipeDTO($recipe->recipe_id, $recipe->name, $recipe->is_public, $recipe->servings);
+        $foods = $recipe->foods->map(
+            fn($food) =>
+            new RecipeFoodDTO(
+                (int) $food->food_id,
+                (float) $food->pivot->grams
+            )
+        )->all();
+        return new RecipeDTO($recipe->recipe_id, $recipe->name, $recipe->is_public, $recipe->servings, $foods);
     }
 
     /**
@@ -80,12 +109,13 @@ class RecipeService
      * @author Oriol Plazas León
      * @since 02/08/2026
      */
-    private function toModel(RecipeDTO $dto): Recipe
+    private function toModel(RecipeDTO $dto, int $userId): Recipe
     {
         return new Recipe([
             'name' => $dto->name,
             'is_public' => $dto->isPublic,
             'servings' => $dto->servings,
+            'user_id' => $userId,
         ]);
     }
 }

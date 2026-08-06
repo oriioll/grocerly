@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\FoodDTO;
+use App\DTOs\RecipeDTO;
+use App\DTOs\RecipeFoodDTO;
 use App\Http\Requests\FoodPostRequest;
+use App\Http\Requests\RecipePostRequest;
 use App\Services\RecipeService;
 use Illuminate\Http\Request;
 
@@ -45,5 +48,26 @@ class RecipeController extends Controller
     {
         $recipe = $this->recipeService->getById($recipeId);
         return response()->json($recipe);
+    }
+
+    public function post(RecipePostRequest $request)
+    {
+        $validated = $request->validated();
+        $user = $request->user();
+        //Foods array gotten from request
+        $foods = array_map(
+            fn($f) => new RecipeFoodDTO($f['food_id'], $f['grams']),
+            $validated['foods']
+        );
+        $recipeDTO =  $recipeDTO = new RecipeDTO(
+            null,
+            $validated['name'],
+            $validated['is_public'],
+            $validated['servings'],
+            $foods,
+        );
+
+        $recipeCreated = $this->recipeService->create($recipeDTO, $user->user_id);
+        return response()->json($recipeCreated, 201);
     }
 }

@@ -11,5 +11,5 @@ class RecipeFood extends Pivot
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'modified_at';
 
-    protected $fillable = ['food_id', 'recipe_id'];
+    protected $fillable = ['food_id', 'recipe_id', 'grams'];
 }
