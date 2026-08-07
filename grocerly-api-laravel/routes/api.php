@@ -2,15 +2,18 @@
 
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\UserController;
+use App\Models\ShoppingList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
 const RECIPE_ID_URL = "/recipes/{recipeId}";
 
-//RECIPES
+
 Route::middleware('middleware.auth.token')->group(function () {
+    //RECIPES
     //Get all public recipes or created by user
     Route::get("/recipes", [RecipeController::class, 'all']);
 
@@ -28,29 +31,31 @@ Route::middleware('middleware.auth.token')->group(function () {
 
     //Delete a concrete recipe, only if created by the user
     Route::delete(RECIPE_ID_URL, [RecipeController::class, 'delete']);
+
+    //SHOPPING LIST
+    //Get shopping-lists of the user
+    Route::get("/shopping-lists", [ShoppingListController::class, 'me']);
+
+    //Get the shopping-list with that id, only created by the user
+    Route::get("/shopping-lists/{listId}", [ShoppingListController::class, 'show']);
+
+    //Post a new shopping list for the user
+    Route::post("/shopping-lists", fn() => "TODO");
+
+    //Post a food into that shopping list, only if created by the user
+    Route::post("/shopping-lists/{listId}/foods", fn() => "TODO");
+
+    //Modify food in parameter of the list in parameter, only if that list is created by the user
+    Route::put("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
+
+    //Delete a concrete food from a concrete shopping list, only if created by the user
+    Route::delete("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
+
+    //Delete a concrete shopping list, only if created by the user
+    Route::delete("/shopping-lists/{listId}", fn() => "TODO");
 });
 
-//SHOPPING LIST
-//Get shopping-list of the user
-Route::get("/shopping-lists", fn() => "TODO");
 
-//Get the recipe with that id, only created by the user
-Route::get("/shopping-lists/{listId}", fn() => "TODO");
-
-//Post a new shopping list for the user
-Route::post("/shopping-lists", fn() => "TODO");
-
-//Post a food into that shopping list, only if created by the user
-Route::post("/shopping-lists/{listId}/foods", fn() => "TODO");
-
-//Modify food in parameter of the list in parameter, only if that list is created by the user
-Route::put("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
-
-//Delete a concrete food from a concrete shopping list, only if created by the user
-Route::delete("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
-
-//Delete a concrete shopping list, only if created by the user
-Route::delete("/shopping-lists/{listId}", fn() => "TODO");
 
 //AUTH
 //Get the info of the current user (who am i) - Use middleware to verify if user is logged and has a token
