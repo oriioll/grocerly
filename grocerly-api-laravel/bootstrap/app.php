@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'middleware.auth.token' => \App\Http\Middleware\AuthenticateWithToken::class,
+            'middleware.listOwner' => \App\Http\Middleware\ListCreatedByUser::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

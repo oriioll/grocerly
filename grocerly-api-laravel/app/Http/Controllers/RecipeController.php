@@ -87,7 +87,7 @@ class RecipeController extends Controller
     {
         $deleted = $this->recipeService->delete($recipeId);
         if ($deleted) {
-            return response()->json(['message' => 'Recipe deleted successfully', 'success' => 'true']);
+            return response()->json(['message' => 'Recipe deleted successfully', 'success' => true]);
         } else {
             return response()->json(['error' => 'Recipe not found'], 404);
         }

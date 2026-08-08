@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTOs\RecipeDTO;
 use App\DTOs\RecipeFoodDTO;
 use App\DTOs\ShoppingListDTO;
+use App\Models\FoodList;
 use App\Models\Recipe;
 use App\Models\RecipeFood;
 use App\Models\ShoppingList;
@@ -32,20 +33,29 @@ class ShoppingListService
     /**
      * Get the shopping list with that id
      * @param int $shoppingListId id of the shopping list
-     * @param int $userId the id of the user logged
      * @return ShoppingListDTO The Shoppinglist with that id
      * @author  Oriol Plazas
      * @since 07/08/2026
      */
-    public function getById(int $shoppingListId, int $userId): ShoppingListDTO
+    public function getById(int $shoppingListId): ShoppingListDTO
     {
-        $shoppingList = $shoppingList = ShoppingList::with('foods')
-            ->where('list_id', $shoppingListId)
-            ->where('user_id', $userId)
-            ->firstOrFail();
+        $shoppingList = ShoppingList::with('foods')->findOrFail($shoppingListId);
         return $this->toDTO($shoppingList);
     }
 
+    /**
+     * Checks if the list is created by the user
+     * @param int $listId The id of the list to check
+     * @param int $userId The user id to check
+     * @return bool If list was created by the user or not
+     * @author Oriol Plazas
+     * @since 08/08/2026
+     */
+    public function listCreatedByUser(int $listId, int $userId): bool
+    {
+        $list = ShoppingList::findOrFail($listId);
+        return $list->user_id == $userId;
+    }
     /**
      * Create recipe in db
      * @param RecipeDTO $recipeDTO recipe to insert
@@ -67,22 +77,36 @@ class ShoppingListService
     }
 
     /**
-     * Delete recipe in db
-     * @param int $recipeId recipe to insert
-     * @return bool If recipe deleted
+     * Delete list in db
+     * @param int $listId list to delete
+     * @return bool If list deleted
      * @author  Oriol Plazas
-     * @since 06/08/2026
+     * @since 08/08/2026
      */
-    public function delete(int $recipeId): bool
+    public function delete(int $listId): bool
     {
-        $recipe = Recipe::find($recipeId);
-        if (!$recipe) {
-            return false;
-        }
+        $list = ShoppingList::findOrFail($listId);
         //Use delete so trigger deleting event and delete foods - recipe relation with that recipe
-        $recipe->foods()->detach();
-        $recipe->delete();
+        $list->foods()->detach();
+        $list->delete();
         return true;
+    }
+
+
+    /**
+     * Deletes a food from a list
+     * @param int $listId The id of the list to delete the food
+     * @param int $foodId The if of the food to delete
+     * @return bool If delete affected more than 0 rows
+     * @author  Oriol Plazas
+     * @since 08/08/2026
+     */
+    public function deleteFoodFromList(int $listId, int $foodId): bool
+    {
+        $deleted = FoodList::where('shopping_list_id', $listId)
+            ->where('food_id', $foodId)
+            ->delete();
+        return $deleted > 0;
     }
 
     /**
@@ -119,10 +143,7 @@ class ShoppingListService
      */
     private function toDTO(ShoppingList $shoppingList): ShoppingListDTO
     {
-        $foods = $shoppingList->foods->map(
-            fn($food) =>
-            (int) $food->food_id
-        )->all();
+        $foods = $shoppingList->foods->pluck('food_id')->all();
         return new ShoppingListDTO($shoppingList->list_id, $shoppingList->user_id, $foods);
     }
 
@@ -132,10 +153,10 @@ class ShoppingListService
      * @author Oriol Plazas León
      * @since 07/08/2026
      */
-    private function toModel(int $userId): ShoppingList
+    private function toModel(ShoppingListDTO $dto): ShoppingList
     {
         return new ShoppingList([
-            'user_id' => $userId,
+            'user_id' => $dto->userId,
         ]);
     }
 }

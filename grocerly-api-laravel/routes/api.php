@@ -36,23 +36,25 @@ Route::middleware('middleware.auth.token')->group(function () {
     //Get shopping-lists of the user
     Route::get("/shopping-lists", [ShoppingListController::class, 'me']);
 
-    //Get the shopping-list with that id, only created by the user
-    Route::get("/shopping-lists/{listId}", [ShoppingListController::class, 'show']);
-
     //Post a new shopping list for the user
     Route::post("/shopping-lists", fn() => "TODO");
 
-    //Post a food into that shopping list, only if created by the user
-    Route::post("/shopping-lists/{listId}/foods", fn() => "TODO");
+    Route::middleware('middleware.listOwner')->group(function () {
+        //Get the shopping-list with that id, only created by the user
+        Route::get("/shopping-lists/{listId}", [ShoppingListController::class, 'show']);
 
-    //Modify food in parameter of the list in parameter, only if that list is created by the user
-    Route::put("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
+        //Post a food into that shopping list, only if created by the user
+        Route::post("/shopping-lists/{listId}/foods", fn() => "TODO");
 
-    //Delete a concrete food from a concrete shopping list, only if created by the user
-    Route::delete("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
+        //Modify food in parameter of the list in parameter, only if that list is created by the user
+        Route::put("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
 
-    //Delete a concrete shopping list, only if created by the user
-    Route::delete("/shopping-lists/{listId}", fn() => "TODO");
+        //Delete a concrete food from a concrete shopping list, only if created by the user
+        Route::delete("/shopping-lists/{listId}/foods/{foodId}", [ShoppingListController::class, 'destroyListFood']);
+
+        //Delete a concrete shopping list, only if created by the user
+        Route::delete("/shopping-lists/{listId}", [ShoppingListController::class, 'destroy']);
+    });
 });
 
 

@@ -34,9 +34,8 @@ class ShoppingListController extends Controller
      */
     public function show(Request $request, int $listId)
     {
-        $user = $request->user();
-        $recipe = $this->shoppingListService->getById($listId, $user->user_id);
-        return response()->json($recipe);
+        $list = $this->shoppingListService->getById($listId);
+        return response()->json($list);
     }
 
     /**
@@ -67,18 +66,28 @@ class ShoppingListController extends Controller
 
 
     /**
-     * Deletes the recipe with that id
-     * @param int $recipeId the id of the recipe to delete
+     * Deletes the shopping list with that id
+     * @param int $listId the id of the list to delete
      * @author Oriol Plazas
-     * @since 06/08/2026
+     * @since 08/08/2026
      */
-    public function destroy(int $recipeId)
+    public function destroy(int $listId)
     {
-        $deleted = $this->recipeService->delete($recipeId);
+        $deleted = $this->shoppingListService->delete($listId);
         if ($deleted) {
-            return response()->json(['message' => 'Recipe deleted successfully', 'success' => 'true']);
+            return response()->json(['message' => 'Shopping list deleted successfully', 'success' => true]);
         } else {
-            return response()->json(['error' => 'Recipe not found'], 404);
+            return response()->json(['error' => 'Shopping list not found'], 404);
+        }
+    }
+
+    public function destroyListFood(int $listId, int $foodId)
+    {
+        $deleted = $this->shoppingListService->deleteFoodFromList($listId, $foodId);
+        if ($deleted) {
+            return response()->json(['message' => 'Food deleted successfully from shopping list', 'success' => 'true']);
+        } else {
+            return response()->json(['error' => 'Food not found in shopping list'], 404);
         }
     }
 
