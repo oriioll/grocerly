@@ -37,14 +37,14 @@ Route::middleware('middleware.auth.token')->group(function () {
     Route::get("/shopping-lists", [ShoppingListController::class, 'me']);
 
     //Post a new shopping list for the user
-    Route::post("/shopping-lists", fn() => "TODO");
+    Route::post("/shopping-lists", [ShoppingListController::class, 'store']);
 
     Route::middleware('middleware.listOwner')->group(function () {
         //Get the shopping-list with that id, only created by the user
         Route::get("/shopping-lists/{listId}", [ShoppingListController::class, 'show']);
 
         //Post a food into that shopping list, only if created by the user
-        Route::post("/shopping-lists/{listId}/foods", fn() => "TODO");
+        Route::post("/shopping-lists/{listId}/foods", [ShoppingListController::class, 'storeFood']);
 
         //Modify food in parameter of the list in parameter, only if that list is created by the user
         Route::put("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");

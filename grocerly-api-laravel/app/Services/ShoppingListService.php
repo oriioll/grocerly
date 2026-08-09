@@ -57,23 +57,32 @@ class ShoppingListService
         return $list->user_id == $userId;
     }
     /**
-     * Create recipe in db
-     * @param RecipeDTO $recipeDTO recipe to insert
-     * @return RecipeDTO Recipe inserted
+     * Inserts a food into the list
+     * @param int $listId id of the list where insert the food
+     * @param int $foodId id of the food to insert
+     * @return ShoppingList List with the foods were food inserted
      * @author  Oriol Plazas
-     * @since 06/08/2026
+     * @since 09/08/2026
      */
-    public function create(RecipeDTO $recipeDTO, int $userId): RecipeDTO
+    public function create(int $listId, int $foodId): ShoppingList
     {
-        $recipe = $this->toModel($recipeDTO, $userId);
-        $recipe->save();
-        //Handle foods of the recipe (RecipeFoods table)
-        $pivotData = collect($recipeDTO->foods)->mapWithKeys(fn($f) => [
-            $f->foodId => ['grams' => $f->grams],
-        ])->toArray();
-        $recipe->foods()->attach($pivotData);
+        $list = ShoppingList::findOrFail($listId);
+        $list->foods()->attach($foodId);
+        return $list->load('foods');
+    }
 
-        return $this->toDTO($recipe->load('foods'));
+
+    /**
+     * Creates a list for the user
+     * @param int $userId The id of the user
+     * @return ShoppingListDTO List created
+     * @author Oriol Plazas
+     * @since 09/08/2026
+     */
+    public function createList(int $userId): ShoppingListDTO
+    {
+        $list = ShoppingList::create(['user_id' => $userId]);
+        return $this->toDTO($list);
     }
 
     /**

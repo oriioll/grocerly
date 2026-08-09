@@ -6,6 +6,7 @@ use App\DTOs\FoodDTO;
 use App\DTOs\RecipeDTO;
 use App\DTOs\RecipeFoodDTO;
 use App\Http\Requests\FoodPostRequest;
+use App\Http\Requests\ListPostRequest;
 use App\Http\Requests\RecipePostRequest;
 use App\Services\RecipeService;
 use App\Services\ShoppingListService;
@@ -23,8 +24,8 @@ class ShoppingListController extends Controller
     public function me(Request $request)
     {
         $user = $request->user();
-        $recipes = $this->shoppingListService->getAll($user->user_id);
-        return response()->json($recipes);
+        $lists = $this->shoppingListService->getAll($user->user_id);
+        return response()->json($lists);
     }
 
     /**
@@ -41,27 +42,25 @@ class ShoppingListController extends Controller
     /**
      * Inserts a recipe into db - validated
      * @author Oriol Plazas
-     * @since 06/08/2026
+     * @since 09/08/2026
      */
-    public function post(RecipePostRequest $request)
+    public function storeFood(ListPostRequest $request, int $listId)
     {
         $validated = $request->validated();
-        $user = $request->user();
-        //Foods array gotten from request
-        $foods = array_map(
-            fn($f) => new RecipeFoodDTO($f['food_id'], $f['grams']),
-            $validated['foods']
-        );
-        $recipeDTO = new RecipeDTO(
-            null,
-            $validated['name'],
-            $validated['is_public'],
-            $validated['servings'],
-            $foods,
-        );
+        $list = $this->shoppingListService->create($listId, $validated['food_id']);
+        return response()->json($list, 201);
+    }
 
-        $recipeCreated = $this->recipeService->create($recipeDTO, $user->user_id);
-        return response()->json($recipeCreated, 201);
+    /**
+     * Creates a shopping list for the user
+     * @author Oriol Plazas
+     * @since 09/08/2026
+     */
+    public function store(Request $request)
+    {
+        $user = $request->user();
+        $list = $this->shoppingListService->createList($user->user_id);
+        return response()->json($list, 201);
     }
 
 
