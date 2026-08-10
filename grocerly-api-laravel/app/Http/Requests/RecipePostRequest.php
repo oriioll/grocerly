@@ -28,7 +28,7 @@ class RecipePostRequest extends FormRequest
             'servings' => 'required|integer|max:50',
             'foods' => 'required|array|max:9000',
             'foods.*.food_id' => 'required|integer|exists:food,food_id',
-            'foods.*.grams' => 'required|string|max:20',
+            'foods.*.grams' => 'required|numeric|min:0',
         ];
     }
 }

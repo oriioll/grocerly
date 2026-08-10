@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTOs\RecipeDTO;
 use App\DTOs\RecipeFoodDTO;
+use App\DTOs\RecipeFoodsDTO;
 use App\Models\Recipe;
 use App\Models\RecipeFood;
 use Illuminate\Database\Eloquent\Collection;
@@ -138,7 +139,7 @@ class RecipeService
     {
         $foods = $recipe->foods->map(
             fn($food) =>
-            new RecipeFoodDTO(
+            new RecipeFoodsDTO(
                 (int) $food->food_id,
                 (float) $food->pivot->grams
             )

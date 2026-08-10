@@ -30,7 +30,7 @@ Route::middleware('middleware.auth.token')->group(function () {
     Route::put(RECIPE_ID_URL, [RecipeController::class, 'update']);
 
     //Delete a concrete recipe, only if created by the user
-    Route::delete(RECIPE_ID_URL, [RecipeController::class, 'delete']);
+    Route::delete(RECIPE_ID_URL, [RecipeController::class, 'destroy']);
 
     //SHOPPING LIST
     //Get shopping-lists of the user
@@ -47,7 +47,7 @@ Route::middleware('middleware.auth.token')->group(function () {
         Route::post("/shopping-lists/{listId}/foods", [ShoppingListController::class, 'storeFood']);
 
         //Modify food in parameter of the list in parameter, only if that list is created by the user
-        Route::put("/shopping-lists/{listId}/foods/{foodId}", fn() => "TODO");
+        //Route::put("/shopping-lists/{listId}/foods/{foodId}", );
 
         //Delete a concrete food from a concrete shopping list, only if created by the user
         Route::delete("/shopping-lists/{listId}/foods/{foodId}", [ShoppingListController::class, 'destroyListFood']);

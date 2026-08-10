@@ -2,7 +2,7 @@
 
 namespace App\DTOs;
 
-final class RecipeFoodDTO
+final class RecipeFoodsDTO
 {
     public function __construct(
         public readonly int $foodId,

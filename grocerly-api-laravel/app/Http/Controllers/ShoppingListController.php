@@ -89,29 +89,4 @@ class ShoppingListController extends Controller
             return response()->json(['error' => 'Food not found in shopping list'], 404);
         }
     }
-
-    /**
-     * Updates a recipe (PUT)
-     * @param int $recipeId The id of the recipe
-     * @author Oriol Plazas
-     * @since 06/08/2026
-     */
-    public function update(RecipePostRequest $request, int $recipeId)
-    {
-        $validated = $request->validated();
-        //Foods array gotten from request
-        $foods = array_map(
-            fn($f) => new RecipeFoodDTO($f['food_id'], $f['grams']),
-            $validated['foods']
-        );
-        $updatedRecipeData = new RecipeDTO(
-            $recipeId,
-            $validated['name'],
-            $validated['is_public'],
-            $validated['servings'],
-            $foods,
-        );
-        $updated = $this->recipeService->put($updatedRecipeData, $recipeId);
-        return response()->json($updated, 200);
-    }
 }

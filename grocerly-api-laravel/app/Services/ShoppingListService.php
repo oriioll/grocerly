@@ -60,15 +60,15 @@ class ShoppingListService
      * Inserts a food into the list
      * @param int $listId id of the list where insert the food
      * @param int $foodId id of the food to insert
-     * @return ShoppingList List with the foods were food inserted
+     * @return ShoppingListDTO List with the foods were food inserted
      * @author  Oriol Plazas
      * @since 09/08/2026
      */
-    public function create(int $listId, int $foodId): ShoppingList
+    public function create(int $listId, int $foodId): ShoppingListDTO
     {
         $list = ShoppingList::findOrFail($listId);
         $list->foods()->attach($foodId);
-        return $list->load('foods');
+        return $this->toDTO($list->load('foods'));
     }
 
 
@@ -112,35 +112,10 @@ class ShoppingListService
      */
     public function deleteFoodFromList(int $listId, int $foodId): bool
     {
-        $deleted = FoodList::where('shopping_list_id', $listId)
+        $deleted = FoodList::where('list_id', $listId)
             ->where('food_id', $foodId)
             ->delete();
         return $deleted > 0;
-    }
-
-    /**
-     * Updates a recipe in db
-     * @param int $recipeId recipe to update
-     * @param RecipeDTO $recipeDTO the updated data of the recipe
-     * @return RecipeDTO updated recipe
-     * @author  Oriol Plazas
-     * @since 06/08/2026
-     */
-    public function put(RecipeDTO $recipeDTO, int $recipeId): RecipeDTO
-    {
-        $recipe = Recipe::findOrFail($recipeId);
-        $recipe->update([
-            'name' => $recipeDTO->name,
-            'is_public' => $recipeDTO->isPublic,
-            'servings' => $recipeDTO->servings,
-        ]);
-
-        //Update also the foods
-        $pivotData = collect($recipeDTO->foods)->mapWithKeys(fn($f) => [
-            $f->foodId => ['grams' => $f->grams],
-        ])->toArray();
-        $recipe->foods()->sync($pivotData);
-        return $this->toDTO($recipe->load('foods'));
     }
 
     /**
