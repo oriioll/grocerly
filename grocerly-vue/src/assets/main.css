@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ==========================================================================
+   1. VARIABLES & TEMAS DE DISEÑO (Fresh App: Coral + Teal)
+   ========================================================================== */
+:root {
+    /* Colores Principales */
+    --bg-main: #FAFAFA;
+    /* Blanco roto minimalista */
+    --bg-card: #FFFFFF;
+    /* Fondo de tarjetas y paneles */
+    --text-main: #263238;
+    /* Gris carbón principal */
+    --text-muted: #607D8B;
+    /* Gris secundario para descripciones/metadatos */
+    --accent-primary: #FF8A65;
+    /* Coral (Energía, Kcal, alertas, acciones primarias) */
+    --accent-secondary: #00897B;
+    /* Teal (Interfaz, checks, éxito, navegación) */
+
+    /* Variaciones Funcionales de Color */
+    --accent-primary-hover: #F4511E;
+    --accent-secondary-hover: #00695C;
+    --accent-primary-light: rgba(255, 138, 101, 0.12);
+    --accent-secondary-light: rgba(0, 137, 123, 0.1);
+    --border-color: #ECEFF1;
+    --border-color-focus: #B0BEC5;
+    --shadow-sm: 0 2px 4px rgba(38, 50, 56, 0.04);
+    --shadow-md: 0 4px 12px rgba(38, 50, 56, 0.08);
+
+    /* Tipografías */
+    --font-poppins: 'Poppins', sans-serif;
+    --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+
+    /* Escala Tipográfica Fluida (Escala Base Desktop) */
+    --h1-size: clamp(1.75rem, 4vw, 2.5rem);
+    /* 28px -> 40px */
+    --h2-size: clamp(1.4rem, 3vw, 1.875rem);
+    /* 22.4px -> 30px */
+    --h3-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    /* 19.2px -> 24px */
+    --h4-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    /* 16.8px -> 20px */
+    --h5-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    /* 15.2px -> 17.6px */
+    --h6-size: clamp(0.85rem, 1.1vw, 0.95rem);
+    /* 13.6px -> 15.2px */
+
+    --p-size: 1rem;
+    /* 16px base */
+    --a-size: 1rem;
+    --span-size: 1rem;
+
+    /* Espaciados y Bordes */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-pill: 9999px;
+}
+
+/* ==========================================================================
+   2. RESETEO & REGLAS BASE
+   ========================================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 100%;
+    overflow-x: hidden;
+    width: 100%;
+    /* 16px estándar */
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-jakarta);
+    font-size: var(--p-size);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   3. JERARQUÍA TIPOGRÁFICA ADAPTATIVA
+   ========================================================================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-jakarta);
+    color: var(--text-main);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: var(--h1-size);
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+h2 {
+    font-size: var(--h2-size);
+    font-weight: 600;
+}
+
+h3 {
+    font-size: var(--h3-size);
+    font-weight: 600;
+}
+
+h4 {
+    font-size: var(--h4-size);
+    font-weight: 500;
+}
+
+h5 {
+    font-size: var(--h5-size);
+    font-weight: 500;
+}
+
+h6 {
+    font-size: var(--h6-size);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+p {
+    font-size: var(--p-size);
+    font-weight: 400;
+    color: var(--text-main);
+}
+
+p.muted,
+.text-muted {
+    color: var(--text-muted);
+}
+
+a {
+    font-size: var(--a-size);
+    font-family: inherit;
+    color: var(--accent-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-secondary-hover);
+    text-decoration: underline;
+}
+
+span {
+    font-size: var(--span-size);
+    font-family: inherit;
+    color: inherit;
+    display: inline-block;
+}
+
+/* Modificadores de Tamaño para Spans y Textos Secundarios */
+.span-xs,
+.text-xs {
+    font-size: 0.75rem;
+    /* 12px */
+    line-height: 1.4;
+}
+
+.span-sm,
+.text-sm {
+    font-size: 0.875rem;
+    /* 14px */
+    line-height: 1.4;
+}
+
+.span-lg,
+.text-lg {
+    font-size: 1.125rem;
+    /* 18px */
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+
+input {
+    padding: 5px;
+    font-family: var(--font-jakarta);
+    color: var(--text-main);
+    border: solid 3px var(--border-color);
+    font-size: var(--p-size);
+    background-color: var(--bg-card);
+    border-radius: 4px;
+    outline: none;
+}
+
+input:focus,
+input:active {
+    outline: none;
+    border: solid 3px var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--accent-primary-light);
+}
+
+button {
+    transition: all .3s ease;
+    font-family: var(--font-jakarta);
+    color: var(--bg-card);
+    font-size: var(--p-size);
+    font-weight: bold;
+    border: none;
+    outline: none;
+    padding: 10px 10px;
+    border-radius: 4px;
+    background-color: var(--accent-primary);
+}
+
+button:hover {
+    cursor: pointer;
+    transition: all .3s ease;
+    background-color: var(--accent-primary-hover);
+}
+
+/* ==========================================================================
+   5. AJUSTES RESPONSIVOS Y DISPOSITIVOS MÓVILES (@media)
+   ========================================================================== */
+
+/* Tabletas y Móviles */
+@media (max-width: 768px) {
+    :root {
+        /* Ajustes finos de escala tipográfica para pantallas pequeñas */
+        --p-size: 0.9375rem;
+        /* 15px en móvil para mejor lectura compacta */
+        --a-size: 0.9375rem;
+        --span-size: 0.9375rem;
+    }
+
+    body {
+        line-height: 1.45;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        margin-bottom: 0.4em;
+    }
+}
+
+/* Pantallas Móviles Pequeñas (< 480px) */
+@media (max-width: 480px) {
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .span-lg,
+    .text-lg {
+        font-size: 1rem;
+    }
+}
