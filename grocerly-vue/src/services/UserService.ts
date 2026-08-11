@@ -1,10 +1,8 @@
 /// <reference types="vite/client" />
 
 import type { User } from '../types/user'
-import { useCookies } from 'vue3-cookies'
 
 export class UserService {
-  private readonly cookies = useCookies().cookies
   private readonly BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || ''
 
   /**
@@ -30,8 +28,8 @@ export class UserService {
       const errorText = await response.text()
       throw new Error(errorText || 'Error creating user - try again later')
     }
-    //Before returning the result, set the token cookie
-    this.cookies.set('token', userBody.token, '365d')
+    //Before returning the result, set the token localStorage
+    localStorage.setItem('token', userBody.token)
     return response.json()
   }
 
@@ -42,13 +40,17 @@ export class UserService {
    * @since 11/08/2026
    */
   public async getMe(): Promise<User> {
-    const token = this.cookies.get('token')
+    const token = localStorage.getItem('token')
     if (!token) {
       throw new Error('No token available to get the user')
     }
-    const url: string = '${this.BASE_URL} + /auth/me'
+    const url: string = `${this.BASE_URL}/auth/me`
     const response = await fetch(url, {
       method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
     })
 
     if (!response.ok) {
