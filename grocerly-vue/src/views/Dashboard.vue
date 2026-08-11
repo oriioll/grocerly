@@ -12,6 +12,7 @@ onMounted(async () => {
         const response = await userService.getMe();
         user.value = response?.name || 'Guest';
     } catch (error: any) {
+        console.log(error)
         router.push('/register');
     }
 })
