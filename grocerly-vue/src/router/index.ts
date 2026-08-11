@@ -1,23 +1,25 @@
 import { useCookies } from 'vue3-cookies'
-const { cookies } = useCookies()
-
-import Register from '@/views/Register.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import Register from '../views/Register.vue'
+import Dashboard from '../views/Dashboard.vue'
+
+const { cookies } = useCookies()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/dashboard',
       name: 'Root',
     },
     {
-      path: '/home',
-      component: Register,
-      name: 'Home',
+      path: '/dashboard',
+      component: Dashboard,
+      name: 'Dashboard',
       meta: {
         title: 'Grocerly - Manage your recipes and your groceries',
+        requiresAuth: true,
       },
     },
     {
@@ -26,21 +28,24 @@ const router = createRouter({
       name: 'Register',
       meta: {
         title: 'Grocerly - Register your user',
+        requiresGuest: true,
       },
     },
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const onlyNoToken = ['Register']
-  const onlyWithToken = ['Home', '/']
+  const token = localStorage.getItem('token')
+  const requiresAuth = to.meta.requiresAuth
+  const requiresGuest = to.meta.requiresGuest
   document.title = (to.meta.title as string) || 'Grocerly'
-  if (!cookies.isKey('token') && onlyWithToken.includes(to.name as string)) {
+  if (requiresAuth && (!token || token.length <= 0)) {
     return next({ name: 'Register' })
   }
-  if (cookies.isKey('token') && onlyNoToken.includes(to.name as string)) {
-    return next({ name: 'Home' })
+  if (requiresGuest && token) {
+    return next({ name: 'Dashboard' })
   }
   next()
 })
+
 export default router
