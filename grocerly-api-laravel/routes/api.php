@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-const RECIPE_ID_URL = "/recipes/{recipeId}";
-
 
 Route::middleware('middleware.auth.token')->group(function () {
     //RECIPES
@@ -21,16 +19,16 @@ Route::middleware('middleware.auth.token')->group(function () {
     Route::get("/recipes/me", [RecipeController::class, 'me']);
 
     //Get a concrete recipe only if is public or made by the user
-    Route::get(RECIPE_ID_URL, [RecipeController::class, 'show']);
+    Route::get("/recipes/{recipeId}", [RecipeController::class, 'show']);
 
     //Post a recipe - sent in request body
     Route::post("/recipes", [RecipeController::class, 'post']);
 
     //Modify the recipe with url recipe id using request body, only if created by the user
-    Route::put(RECIPE_ID_URL, [RecipeController::class, 'update']);
+    Route::put("/recipes/{recipeId}", [RecipeController::class, 'update']);
 
     //Delete a concrete recipe, only if created by the user
-    Route::delete(RECIPE_ID_URL, [RecipeController::class, 'destroy']);
+    Route::delete("/recipes/{recipeId}", [RecipeController::class, 'destroy']);
 
     //SHOPPING LIST
     //Get shopping-lists of the user
