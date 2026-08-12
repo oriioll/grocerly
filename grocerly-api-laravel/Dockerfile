@@ -1,5 +1,5 @@
 # Usa la versión de PHP de tu proyecto (8.2 o 8.3 son las recomendadas)
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # Instalar dependencias necesarias del sistema operativo (incluye soporte para MySQL y PostgreSQL)
 RUN apt-get update && apt-get install -y \
