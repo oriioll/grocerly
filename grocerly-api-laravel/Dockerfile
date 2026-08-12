@@ -31,7 +31,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         gd \
         zip \
         intl \
-        opcache
+    && docker-php-ext-enable opcache
 
 # Copiar ejecutable oficial de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
