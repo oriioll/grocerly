@@ -24,21 +24,20 @@ class UserService
 
     /**
      * Get a user by its token
-     * @param string $unhashedToken The token of the user
+     * @param string $token The token of the user
      * @return User The user with the token
      * @author  Oriol Plazas
      * @since 01/08/2026
      * @see App\Models\User.php
      */
-    public function getByToken(string $unhashedToken): ?User
+    public function getByToken(string $token): ?User
     {
-        $hashedToken = hash('sha256', $unhashedToken);
-        return User::where('token', $hashedToken)->first();
+        return User::where('token', $token)->first();
     }
 
     /**
      * Create user in db
-     * @param UserDTO $userDTO userDTO object of the usre to insert
+     * @param UserDTO $userDTO userDTO object of the user to insert
      * @return User The user inserted
      * @author  Oriol Plazas
      * @since 30/07/2026
@@ -48,7 +47,7 @@ class UserService
     {
         return User::create([
             'name' => $userDTO->name,
-            'token' => hash('sha256', $userDTO->token),
+            'token' => $userDTO->token,
         ]);
     }
 }
