@@ -30,6 +30,8 @@ export class UserService {
     }
     //Before returning the result, set the token localStorage
     localStorage.setItem('token', userBody.token)
+    // Persist the user name immediately so the UI can read it after registration
+    localStorage.setItem('name', userBody.name)
     return response.json()
   }
 
