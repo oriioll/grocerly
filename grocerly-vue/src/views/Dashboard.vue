@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { UserService } from '@/services/UserService';
 
 const router = useRouter();
-const user = ref('Guest');
+const user = ref('');
 const userService = new UserService();
 
-onMounted(async () => {
+onBeforeMount(async () => {
     try {
-        const response = await userService.getMe();
-        user.value = response?.name || 'Guest';
+        user.value = localStorage.getItem('name') || 'Guest';
     } catch (error: any) {
         console.log(error)
         router.push('/register');
