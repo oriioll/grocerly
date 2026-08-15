@@ -33,7 +33,7 @@ const router = createRouter({
     {
       path: '/recipes/:recipeId',
       component: Dashboard,
-      name: 'Recipes',
+      name: 'RecipeDetail',
       meta: {
         title: 'Recipes - Manage your recipes and create new ones',
         requiresAuth: true,
@@ -42,7 +42,7 @@ const router = createRouter({
     {
       path: '/shopping-lists',
       component: Dashboard,
-      name: 'Recipes',
+      name: 'Lists',
       meta: {
         title: 'Shopping lists - Manage your lists and create new ones',
         requiresAuth: true,
@@ -51,7 +51,7 @@ const router = createRouter({
     {
       path: '/shopping-lists/:listId',
       component: Dashboard,
-      name: 'Recipes',
+      name: 'ListDetail',
       meta: {
         title: 'Recipes - Manage your lists and create new ones',
         requiresAuth: true,
