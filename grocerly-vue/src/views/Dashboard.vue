@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
-import { UserService } from '@/services/UserService';
+import QuickActions from '@/components/Dashboard/QuickActions.vue';
+import RecentActivity from '@/components/Dashboard/RecentActivity.vue';
 
 const router = useRouter();
 const user = ref('');
-const userService = new UserService();
 
 onBeforeMount(async () => {
     try {
@@ -19,7 +19,11 @@ onBeforeMount(async () => {
 
 <template>
     <main>
-        <h1>Hello, {{ user }} </h1>
+        <h1>Hello, {{ user }}! </h1>
+        <section class="bento">
+            <QuickActions />
+            <RecentActivity />
+        </section>
     </main>
 </template>
 
@@ -33,6 +37,14 @@ main {
     align-items: center;
     padding: 50px;
     gap: 1rem;
+}
 
+.bento {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .25rem;
+    width: 90dvw;
 }
 </style>
