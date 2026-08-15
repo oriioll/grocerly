@@ -16,7 +16,7 @@ export class ListService {
     if (!token) {
       throw new Error('No token available to get the user')
     }
-    const url: string = `${this.BASE_URL}/recipes/me`
+    const url: string = `${this.BASE_URL}/shopping-lists`
     const response = await fetch(url, {
       method: 'GET',
       headers: {
