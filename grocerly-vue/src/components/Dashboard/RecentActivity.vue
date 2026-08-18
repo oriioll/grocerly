@@ -7,6 +7,7 @@ import { ListService } from '@/services/ListService';
 import type { ShoppingList } from '@/types/shoppingList';
 import RecipeCard from './RecipeCard.vue';
 import ShoppingListCard from './ShoppingListCard.vue';
+import Skeleton from '../shared/Skeleton.vue';
 //Instance list and recipes services to fetch the API
 const recipeService: RecipeService = new RecipeService
 const listService: ListService = new ListService
@@ -53,7 +54,10 @@ onMounted(async () => {
                 <h4>My Recipes</h4>
                 <router-link to="/recipes">See all</router-link>
             </div>
-            <RecipeCard v-if="recipes.length > 0" v-for="recipe in recipes" :key="recipe.id!" :recipe="recipe" />
+            <Skeleton v-if="recipesLoading" />
+            <template v-else-if="recipes.length > 0">
+                <RecipeCard v-for="recipe in recipes" :key="recipe.id!" :recipe="recipe" />
+            </template>
             <p v-else>No recipes created, <span class="cta"> create one now!</span></p>
         </div>
         <div class="lists">
@@ -61,7 +65,10 @@ onMounted(async () => {
                 <h4>Shopping Lists</h4>
                 <router-link to="/shopping-lists">See all</router-link>
             </div>
-            <ShoppingListCard v-if="lists.length > 0" v-for="list in lists" :key="list.listId!" :list="list" />
+            <Skeleton v-if="listsLoading" />
+            <template v-else-if="lists.length > 0">
+                <ShoppingListCard v-for="list in lists" :key="list.listId!" :list="list" />
+            </template>
             <p v-else>No shopping lists created, <span class="cta"> create one now!</span></p>
         </div>
     </article>
@@ -87,6 +94,7 @@ onMounted(async () => {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    border-radius: 4px;
 }
 
 .recipes {
