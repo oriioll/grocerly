@@ -32,4 +32,34 @@ export class RecipeService {
 
     return response.json()
   }
+
+  /**
+   * Makes a POST request to the API to create a recipe
+   * @param recipe The recipe to create
+   * @returns The API response
+   * @author Oriol Plazas
+   * @since 18/08/2026
+   */
+  public async postRecipe(recipe: Recipe): Promise<Recipe> {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      throw new Error('No token available to get the user')
+    }
+    const url: string = `${this.BASE_URL}/recipes`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(recipe),
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(errorText || 'Error posting the recipes for the user')
+    }
+
+    return response.json()
+  }
 }

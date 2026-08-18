@@ -32,4 +32,31 @@ export class ListService {
 
     return response.json()
   }
+
+  /**
+   * Makes a POST request to the API to create a list
+   * @returns The API response
+   * @author Oriol Plazas
+   * @since 18/08/2026
+   */
+  public async postRecipe(): Promise<ShoppingList> {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      throw new Error('No token available to get the user')
+    }
+    const url: string = `${this.BASE_URL}/shopping-lists`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(errorText || 'Error posting the shopping list for the user')
+    }
+    return response.json()
+  }
 }
