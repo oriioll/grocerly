@@ -1,13 +1,18 @@
 <script setup lang="ts">
+import router from '@/router';
 import type { ShoppingList } from '@/types/shoppingList';
 
 const props = defineProps<{
     list: ShoppingList
 }>()
+
+const openList = () => {
+    router.push("/shopping-lists/" + props.list.listId)
+}
 </script>
 
 <template>
-    <div class="card">
+    <div class="card" @click="openList">
         <p>{{ props.list.foods.length }} items</p>
     </div>
 </template>

@@ -1,13 +1,18 @@
 <script setup lang="ts">
+import router from '@/router';
 import type { Recipe } from '@/types/recipe';
 
 const props = defineProps<{
     recipe: Recipe
 }>()
+
+const openList = () => {
+    router.push("/recipes/" + props.recipe.id)
+}
 </script>
 
 <template>
-    <div class="card">
+    <div class="card" @click="openList">
         <div class="top">
             <h6>{{ props.recipe.name }}</h6>
             <p>{{ props.recipe.servings }} servings</p>
