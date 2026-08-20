@@ -214,6 +214,15 @@ input:active {
     box-shadow: 0 0 0 3px var(--accent-primary-light);
 }
 
+.food-selector__search {
+    width: 100%;
+}
+
+.food-selector__option input[type="checkbox"] {
+    width: auto;
+    accent-color: var(--accent-secondary);
+}
+
 button {
     transition: all .3s ease;
     font-family: var(--font-jakarta);

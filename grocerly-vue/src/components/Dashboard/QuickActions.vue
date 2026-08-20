@@ -1,13 +1,22 @@
 <script setup lang="ts">
-
+import type { Ref } from 'vue';
+import { ref } from 'vue';
+import CreationSidePanel from '../shared/CreationSidePanel.vue';
+const showRecipePanel: Ref<boolean> = ref(false);
+const showListPanel: Ref<boolean> = ref(false);
 </script>
 
 <template>
     <article class="quickActions">
         <h3>What are we gonna cook or buy today?</h3>
         <div class="buttons">
-            <button type="button">+ New Recipe</button>
-            <button type="button">+ New List</button>
+            <!--New recipe button and side panel-->
+            <button type="button" @click="showRecipePanel = true">+ New Recipe</button>
+            <CreationSidePanel :show="showRecipePanel" :type="'recipe'" @close="showRecipePanel = false" />
+
+            <!--New list button and side panel-->
+            <button type="button" @click="showListPanel = true">+ New List</button>
+            <CreationSidePanel :show="showListPanel" :type="'list'" @close="showListPanel = false" />
         </div>
     </article>
 </template>

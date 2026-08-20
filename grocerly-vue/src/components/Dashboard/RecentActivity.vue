@@ -49,6 +49,7 @@ onMounted(async () => {
 
 <template>
     <article class="activity">
+        <!--Recipes container-->
         <div class="recipes">
             <div class="heading">
                 <h4>My Recipes</h4>
@@ -56,10 +57,12 @@ onMounted(async () => {
             </div>
             <Skeleton v-if="recipesLoading" />
             <template v-else-if="recipes.length > 0">
+                <!--Add a recipe card for each recipe the user has-->
                 <RecipeCard v-for="recipe in recipes" :key="recipe.id!" :recipe="recipe" />
             </template>
             <p v-else>No recipes created, <span class="cta"> create one now!</span></p>
         </div>
+        <!--Shopping lists container-->
         <div class="lists">
             <div class="heading">
                 <h4>Shopping Lists</h4>
@@ -67,6 +70,7 @@ onMounted(async () => {
             </div>
             <Skeleton v-if="listsLoading" />
             <template v-else-if="lists.length > 0">
+                <!--Add a shopping list card for each shopping list the user has-->
                 <ShoppingListCard v-for="list in lists" :key="list.listId!" :list="list" />
             </template>
             <p v-else>No shopping lists created, <span class="cta"> create one now!</span></p>

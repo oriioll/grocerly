@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 
 import type { Recipe } from '../types/recipe'
+import type { RecipeCreationPayload } from '../types/recipeCreation'
 
 export class RecipeService {
   private readonly BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || ''
@@ -40,7 +41,7 @@ export class RecipeService {
    * @author Oriol Plazas
    * @since 18/08/2026
    */
-  public async postRecipe(recipe: Recipe): Promise<Recipe> {
+  public async postRecipe(recipe: RecipeCreationPayload): Promise<Recipe> {
     const token = localStorage.getItem('token')
     if (!token) {
       throw new Error('No token available to get the user')
@@ -51,6 +52,7 @@ export class RecipeService {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(recipe),
     })
