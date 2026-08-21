@@ -21,6 +21,7 @@
     /* Variaciones Funcionales de Color */
     --accent-primary-hover: #F4511E;
     --accent-secondary-hover: #00695C;
+    --color-error: #dc2626;
     --accent-primary-light: rgba(255, 138, 101, 0.12);
     --accent-secondary-light: rgba(0, 137, 123, 0.1);
     --border-color: #ECEFF1;
@@ -146,6 +147,11 @@ p {
     color: var(--text-main);
 }
 
+.errorMsg {
+    color: var(--color-error);
+    font-weight: 700;
+}
+
 p.muted,
 .text-muted {
     color: var(--text-muted);
@@ -261,11 +267,26 @@ button:hover {
     }
 
     h1,
-    h2,
-    h3,
     h4 {
         margin-bottom: 0.4em;
     }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+
+    p {
+        font-size: 0.875rem;
+    }
+
+    a {
+        font-size: 0.875rem;
+    }
+
 }
 
 /* Pantallas Móviles Pequeñas (< 480px) */

@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Register from '../views/Register.vue'
 import Dashboard from '../views/Dashboard.vue'
+import NotFound from '@/views/NotFound.vue'
+
 import { UserService } from '@/services/UserService.ts'
 let isAppLoaded: boolean = false
 const userService: UserService = new UserService()
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -64,6 +66,14 @@ const router = createRouter({
       meta: {
         title: 'Grocerly - Register your user',
         requiresGuest: true,
+      },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound,
+      meta: {
+        title: 'Grocerly - Page Not Found',
       },
     },
   ],

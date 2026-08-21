@@ -24,6 +24,7 @@ const openList = () => {
 <style scoped>
 .card {
     width: 100%;
+    min-width: 0;
     padding: 5px;
     display: flex;
     flex-direction: column;
@@ -43,6 +44,7 @@ const openList = () => {
 
 .top {
     width: 100%;
+    min-width: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -52,5 +54,13 @@ const openList = () => {
 .top p {
     font-size: .8rem;
     opacity: .7;
+    flex: 0 1 auto;
+    text-align: right;
+}
+
+.card h6,
+.card p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 </style>

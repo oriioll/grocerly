@@ -30,13 +30,20 @@ onBeforeMount(async () => {
 <style scoped>
 main {
     width: 100%;
-    height: 50dvh;
+    min-height: 100dvh;
+    height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 50px;
+    padding: clamp(2rem, 8vh, 5rem) 1rem 2rem;
     gap: 1rem;
+}
+
+main h1 {
+    max-width: 100%;
+    text-align: center;
+    overflow-wrap: anywhere;
 }
 
 .bento {
@@ -46,5 +53,6 @@ main {
     align-items: center;
     gap: .25rem;
     width: 90dvw;
+    max-width: 100%;
 }
 </style>

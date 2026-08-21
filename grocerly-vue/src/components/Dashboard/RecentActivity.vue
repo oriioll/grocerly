@@ -8,6 +8,8 @@ import type { ShoppingList } from '@/types/shoppingList';
 import RecipeCard from './RecipeCard.vue';
 import ShoppingListCard from './ShoppingListCard.vue';
 import Skeleton from '../shared/Skeleton.vue';
+import CreationSidePanel from '../shared/CreationSidePanel.vue';
+
 //Instance list and recipes services to fetch the API
 const recipeService: RecipeService = new RecipeService
 const listService: ListService = new ListService
@@ -23,6 +25,10 @@ const recipesError = ref<boolean>(false)
 const listsError = ref<boolean>(false)
 const recipesErrorMsg = ref<string>('')
 const listsErrorMsg = ref<string>('')
+
+const showRecipePanel: Ref<boolean> = ref(false);
+const showListPanel: Ref<boolean> = ref(false);
+
 onMounted(async () => {
     // RECIPES
     try {
@@ -61,6 +67,7 @@ onMounted(async () => {
                 <RecipeCard v-for="recipe in recipes" :key="recipe.id!" :recipe="recipe" />
             </template>
             <p v-else>No recipes created, <span class="cta"> create one now!</span></p>
+            <CreationSidePanel :show="showRecipePanel" :type="'list'" @close="showListPanel = false" />
         </div>
         <!--Shopping lists container-->
         <div class="lists">
@@ -74,6 +81,7 @@ onMounted(async () => {
                 <ShoppingListCard v-for="list in lists" :key="list.listId!" :list="list" />
             </template>
             <p v-else>No shopping lists created, <span class="cta"> create one now!</span></p>
+            <CreationSidePanel :show="showListPanel" :type="'list'" @close="showListPanel = false" />
         </div>
     </article>
 </template>
@@ -91,6 +99,8 @@ onMounted(async () => {
 
 .lists,
 .recipes {
+    min-width: 0;
+    min-height: 0;
     box-shadow: var(--shadow-md);
     background-color: var(--bg-card);
     padding: 15px 10px;
@@ -111,6 +121,7 @@ onMounted(async () => {
 
 .heading {
     width: 100%;
+    min-width: 0;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -125,5 +136,29 @@ onMounted(async () => {
 
 .cta:hover {
     color: var(--accent-primary-hover);
+}
+
+@media (max-width: 768px) {
+    .activity {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .recipes,
+    .lists {
+        width: 100%;
+        padding: 0.75rem;
+    }
+
+    .heading {
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .heading h4,
+    .heading a {
+        overflow-wrap: anywhere;
+    }
 }
 </style>

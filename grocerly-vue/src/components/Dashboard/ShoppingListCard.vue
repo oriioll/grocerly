@@ -20,6 +20,7 @@ const openList = () => {
 <style scoped>
 .card {
     width: 100%;
+    min-width: 0;
     padding: 5px;
     display: flex;
     flex-direction: column;
@@ -29,6 +30,11 @@ const openList = () => {
     border: solid 1px var(--border-color);
     cursor: pointer;
     transition: all .2s ease;
+}
+
+.card p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 
 .card:hover {

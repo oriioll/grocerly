@@ -3,6 +3,7 @@ import { type Ref, ref, computed, onMounted } from 'vue';
 import type { Food } from '../../types/food';
 import { FoodService } from '@/services/FoodService';
 import { RecipeService } from '@/services/RecipeService';
+import { ListService } from '@/services/ListService';
 import type { RecipeFoodInput, RecipeCreationPayload } from '@/types/recipeCreation';
 
 const props = defineProps<{
@@ -19,9 +20,13 @@ const foodErrorMsg: Ref<string> = ref('');
 
 //Services data, and UX-UI variables used when managing new recipes or lists
 const recipeService: RecipeService = new RecipeService();
+const listService: ListService = new ListService();
 const recipeError: Ref<boolean> = ref(false);
 const recipeErrorMsg: Ref<string> = ref('');
 const isRecipeLoading: Ref<boolean> = ref(false);
+const listError: Ref<boolean> = ref(false);
+const listErrorMsg: Ref<string> = ref('');
+const isListLoading: Ref<boolean> = ref(false);
 
 // Values entered in the recipe form.
 const recipeName = ref('');
@@ -69,6 +74,11 @@ onMounted(async () => {
  * Handles the recipe creation by calling the recipe service to make and API request and handles possible errors and display them
  */
 const handleRecipeCreation = async () => {
+    if (isRecipeLoading.value) return;
+
+    isRecipeLoading.value = true;
+    recipeError.value = false;
+    recipeErrorMsg.value = '';
     try {
         const newRecipe: RecipeCreationPayload = {
             name: recipeName.value,
@@ -86,6 +96,25 @@ const handleRecipeCreation = async () => {
         recipeErrorMsg.value = e.message || "Can't create the recipe, try again later."
     } finally {
         isRecipeLoading.value = false;
+    }
+}
+
+/**
+ * Handles the list creation by calling the list service to make and API request and handles possible errors and display them
+ */
+const handleListCreation = async () => {
+    if (isListLoading.value) return;
+
+    isListLoading.value = true;
+    listError.value = false;
+    listErrorMsg.value = '';
+    try {
+        await listService.postRecipe();
+    } catch (e: any) {
+        listError.value = true;
+        listErrorMsg.value = e.message || "Can't create the shopping list, try again later.";
+    } finally {
+        isListLoading.value = false;
     }
 }
 </script>
@@ -142,10 +171,28 @@ const handleRecipeCreation = async () => {
                 </div>
             </fieldset>
 
-            <button type="submit">Create recipe</button>
+            <p v-if="recipeError" class="errorMsg">{{ recipeErrorMsg }}</p>
+            <button v-if="isRecipeLoading" disabled type="button" aria-busy="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25">
+                    <g fill="none" stroke="var(--bg-main)" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path stroke-dasharray="18" d="M12 3c4.97 0 9 4.03 9 9">
+                            <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="18;0" />
+                            <animateTransform attributeName="transform" dur="1s" repeatCount="indefinite" type="rotate"
+                                values="0 12 12;360 12 12" />
+                        </path>
+                        <path stroke-dasharray="60"
+                            d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z"
+                            opacity=".3">
+                            <animate fill="freeze" attributeName="stroke-dashoffset" dur="1.2s" values="60;0" />
+                        </path>
+                    </g>
+                </svg>
+            </button>
+            <button v-else type="submit">Create recipe</button>
         </form>
 
-        <form v-else class="creation-form" @submit.prevent>
+        <form v-else class="creation-form" @submit.prevent="handleListCreation">
             <h2>Create a shopping list</h2>
 
             <!-- The same picker is reused here, but its values belong to the list. -->
@@ -163,7 +210,25 @@ const handleRecipeCreation = async () => {
                 </div>
             </fieldset>
 
-            <button type="submit">Create shopping list</button>
+            <p v-if="listError" class="errorMsg">{{ listErrorMsg }}</p>
+            <button v-if="isListLoading" disabled type="button" aria-busy="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25">
+                    <g fill="none" stroke="var(--bg-main)" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path stroke-dasharray="18" d="M12 3c4.97 0 9 4.03 9 9">
+                            <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="18;0" />
+                            <animateTransform attributeName="transform" dur="1s" repeatCount="indefinite" type="rotate"
+                                values="0 12 12;360 12 12" />
+                        </path>
+                        <path stroke-dasharray="60"
+                            d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z"
+                            opacity=".3">
+                            <animate fill="freeze" attributeName="stroke-dashoffset" dur="1.2s" values="60;0" />
+                        </path>
+                    </g>
+                </svg>
+            </button>
+            <button v-else type="submit">Create shopping list</button>
         </form>
 
         <p v-if="foodError" class="creation-side-panel__error">{{ foodErrorMsg }}</p>
@@ -217,6 +282,37 @@ const handleRecipeCreation = async () => {
     justify-content: center;
     align-items: flex-start;
     gap: .25rem;
+}
+
+.recipe-form__field--public {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.recipe-form__field--public input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    padding: 0;
+    border: 0;
+    accent-color: var(--accent-secondary);
+}
+
+@media (max-width: 768px) {
+    .recipe-form__details {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .recipe-form__field {
+        width: 100%;
+    }
+
+    .recipe-form__field--public {
+        width: auto;
+        align-self: center;
+    }
 }
 
 .food-selector {
