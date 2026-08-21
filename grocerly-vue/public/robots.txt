@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /$
+Allow: /register
+Disallow: /dashboard
+Disallow: /recipes/
+Disallow: /shopping-lists/
+
+Sitemap: https://grocerly-app.vercel.app/sitemap.xml

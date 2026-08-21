@@ -2,17 +2,23 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Register from '../views/Register.vue'
 import Dashboard from '../views/Dashboard.vue'
 import NotFound from '@/views/NotFound.vue'
+import Landing from '../views/Landing.vue' // <-- IMPORT NOU
 
 import { UserService } from '@/services/UserService.ts'
 let isAppLoaded: boolean = false
 const userService: UserService = new UserService()
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '/',
-      redirect: '/dashboard',
-      name: 'Root',
+      component: Landing,
+      name: 'Landing',
+      meta: {
+        title: 'Grocerly - Smart Recipes & Shopping Lists',
+        requiresGuest: true,
+      },
     },
     {
       path: '/dashboard',
@@ -55,7 +61,7 @@ const router = createRouter({
       component: Dashboard,
       name: 'ListDetail',
       meta: {
-        title: 'Recipes - Manage your lists and create new ones',
+        title: 'Shopping lists - Manage your lists and create new ones',
         requiresAuth: true,
       },
     },
@@ -84,15 +90,17 @@ router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.meta.requiresAuth
   const requiresGuest = to.meta.requiresGuest
   document.title = (to.meta.title as string) || 'Grocerly'
-  //Verify pages where user is going and check if he has token or not
+
+  // Verify pages where user is going and check if he has token or not
   if (requiresAuth && (!token || token.length <= 0)) {
     return next({ name: 'Register' })
   }
+
   if (requiresGuest && token) {
     return next({ name: 'Dashboard' })
   }
 
-  //Cache the user each time the app is recharched or opened
+  // Cache the user each time the app is recharged or opened
   if (token && !isAppLoaded) {
     try {
       const user = await userService.getMe()
